@@ -84,16 +84,21 @@ p {
 }
 
 .brand {
-  font-weight: 650;
-  letter-spacing: -0.01em;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
 }
 
-.mark {
-  color: var(--accent);
-  font-size: 1.1rem;
+.brand img {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+.wordmark {
+  font-size: 1.15rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
 }
 
 .nav {

@@ -72,13 +72,14 @@ ${box ? `<script src="/app.js" defer></script>` : ""}
 </head>
 <body${box ? ` data-box="${esc(box)}" data-count="${count ?? 0}"` : ""}>
 <header class="top">
-  <a class="brand" href="/m"><span class="mark">◍</span> Voidpost</a>
+  <a class="brand" href="/m" aria-label="Void post"><img src="/favicon.svg" alt="" width="30" height="30"></a>
   <nav class="nav">
     ${signedIn
       ? `<a href="/m">Inbox</a><a href="/settings">Settings</a>
          <form method="post" action="/logout" class="inline"><button class="link" type="submit">Sign out</button></form>`
       : ""}
   </nav>
+  <a class="wordmark" href="/m">Void post</a>
 </header>
 <main class="wrap">
 ${body}
