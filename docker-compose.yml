@@ -1,0 +1,40 @@
+# Voidpost — catch-all disposable mail server.
+#
+# Configuration comes from .env, the same file a bare `bun start` uses:
+# copy .env.example to .env, set DOMAIN and APP_PASSWORD, then:
+#
+#   docker compose up -d --build
+#
+# Inbound mail needs TCP 25 published on this host, with the domain's MX record
+# pointing at it. If 25 is already taken on the host, move only the host side:
+#
+#   SMTP_HOST_PORT=2525 docker compose up -d
+services:
+  voidpost:
+    build: .
+    image: voidpost:latest
+    container_name: voidpost
+    restart: unless-stopped
+
+    # The whole configuration: DOMAIN, APP_PASSWORD, PORT, SMTP_PORT,
+    # MAX_MESSAGE_BYTES, SECURE_COOKIES, retention is set in the web UI.
+    env_file:
+      - .env
+
+    environment:
+      # Container layout, overriding the host-oriented values from .env:
+      # the service must listen on every interface, and the SQLite database
+      # belongs on the volume rather than inside the container.
+      HOST: 0.0.0.0
+      DATA_DIR: /data
+
+    ports:
+      # Host side is overridable without touching .env.
+      - "${WEB_PORT:-3000}:${PORT:-3000}"
+      - "${SMTP_HOST_PORT:-25}:${SMTP_PORT:-25}"
+
+    volumes:
+      - voidpost-data:/data
+
+volumes:
+  voidpost-data:

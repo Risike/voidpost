@@ -1,0 +1,6 @@
+.env
+data/
+*.log
+server.pid
+voidpost.zip
+.git
