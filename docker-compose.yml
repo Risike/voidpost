@@ -16,22 +16,30 @@ services:
     container_name: voidpost
     restart: unless-stopped
 
-    # The whole configuration: DOMAIN, APP_PASSWORD, PORT, SMTP_PORT,
-    # MAX_MESSAGE_BYTES, SECURE_COOKIES, retention is set in the web UI.
+    # Domain, password, size limit and cookie flags come from .env; the
+    # retention window is set in the web interface, not here.
     env_file:
       - .env
 
     environment:
-      # Container layout, overriding the host-oriented values from .env:
-      # the service must listen on every interface, and the SQLite database
-      # belongs on the volume rather than inside the container.
+      # Container layout: listen on every interface, keep SQLite on the volume,
+      # and pin the listener ports to the ones mapped below so that a
+      # host-oriented PORT/SMTP_PORT in .env cannot desynchronise them.
       HOST: 0.0.0.0
       DATA_DIR: /data
+      PORT: 3000
+      SMTP_PORT: 25
 
+    # Targets are literals on purpose: this Compose version drops an
+    # interpolated target port ("invalid port specification: 0/tcp"), so only
+    # the host side is configurable and .env needs no extra entries.
     ports:
-      # Host side is overridable without touching .env.
-      - "${WEB_PORT:-3000}:${PORT:-3000}"
-      - "${SMTP_HOST_PORT:-25}:${SMTP_PORT:-25}"
+      - target: 3000
+        published: ${WEB_PORT:-3000}
+        protocol: tcp
+      - target: 25
+        published: ${SMTP_HOST_PORT:-25}
+        protocol: tcp
 
     volumes:
       - voidpost-data:/data
