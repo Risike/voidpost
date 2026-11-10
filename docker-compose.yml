@@ -34,12 +34,8 @@ services:
     # interpolated target port ("invalid port specification: 0/tcp"), so only
     # the host side is configurable and .env needs no extra entries.
     ports:
-      - target: 3000
-        published: ${WEB_PORT:-3000}
-        protocol: tcp
-      - target: 25
-        published: ${SMTP_HOST_PORT:-25}
-        protocol: tcp
+      - "25:25"
+      - "8093:3000"
 
     volumes:
       - voidpost-data:/data
