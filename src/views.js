@@ -180,6 +180,11 @@ export function mailboxPage({ box, mails }) {
   </div>
   <div class="actions">
     <button class="btn" type="button" data-copy="${esc(address)}">Copy address</button>
+    ${mails.length > 0
+      ? `<form method="post" action="/m/${esc(encodeURIComponent(box))}/delete" class="inline">
+      <button class="btn danger" type="submit">Delete all</button>
+    </form>`
+      : ""}
   </div>
 </section>
 
@@ -233,7 +238,12 @@ export function messagePage({ box, mail }) {
     <div class="eyebrow"><a href="/m/${esc(encodeURIComponent(box))}">${esc(box)}@${esc(config.domain)}</a> /</div>
     <h1 class="subject">${esc(mail.subject)}</h1>
   </div>
-  <div class="actions"><a class="btn" href="/m/${esc(encodeURIComponent(box))}">Back to inbox</a></div>
+  <div class="actions">
+    <a class="btn" href="/m/${esc(encodeURIComponent(box))}">Back to inbox</a>
+    <form method="post" action="${esc(base)}/delete" class="inline">
+      <button class="btn danger" type="submit">Delete</button>
+    </form>
+  </div>
 </section>
 
 <dl class="meta-grid card">

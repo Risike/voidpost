@@ -231,6 +231,14 @@ async function route(request) {
       return html(views.mailboxPage({ box, mails: db.listMails(box) }));
     }
 
+    // Empty a whole mailbox: /m/<box>/delete
+    if (segments.length === 3 && segments[2] === "delete") {
+      if (method !== "POST") return methodNotAllowed();
+      if (!isSameOrigin(request)) return forbidden();
+      db.deleteMailsInBox(box);
+      return redirect(`/m/${encodeURIComponent(box)}`);
+    }
+
     const id = Number.parseInt(segments[2], 10);
     if (!Number.isFinite(id)) {
       return html(views.errorPage({ status: 404, message: "Message not found." }), 404);
@@ -249,6 +257,19 @@ async function route(request) {
     if (segments.length === 3) {
       if (method !== "GET" && method !== "HEAD") return methodNotAllowed();
       return html(views.messagePage({ box, mail }));
+    }
+
+    // Delete a single message: /m/<box>/<id>/delete
+    if (segments.length === 4 && segments[3] === "delete") {
+      if (method !== "POST") return methodNotAllowed();
+      if (!isSameOrigin(request)) return forbidden();
+      if (!db.deleteMail(id, box)) {
+        return html(
+          views.errorPage({ status: 404, message: "This message no longer exists." }),
+          404
+        );
+      }
+      return redirect(`/m/${encodeURIComponent(box)}`);
     }
 
     if (segments.length === 4 && segments[3] === "html") {

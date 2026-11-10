@@ -274,6 +274,15 @@ select:focus {
   filter: brightness(1.07);
 }
 
+.btn.danger {
+  color: var(--accent);
+}
+
+.btn.danger:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
 .open-form {
   display: flex;
   gap: 0.6rem;

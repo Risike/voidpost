@@ -99,6 +99,8 @@ const boxesStmt = db.prepare(
 );
 
 const deleteStmt = db.prepare(`DELETE FROM mails WHERE received_at <= ?1`);
+const deleteOneStmt = db.prepare(`DELETE FROM mails WHERE id = ?1 AND box = ?2`);
+const deleteBoxMailsStmt = db.prepare(`DELETE FROM mails WHERE box = ?1`);
 const settingStmt = db.prepare(`SELECT value FROM settings WHERE key = ?1`);
 const settingUpsertStmt = db.prepare(
   `INSERT INTO settings (key, value) VALUES (?1, ?2)
@@ -187,6 +189,20 @@ const pruneStmt = db.prepare(
 
 export function pruneEmptyBoxes() {
   return pruneStmt.run(cutoff()).changes;
+}
+
+/** Remove one message; its address goes away with the last message. */
+export function deleteMail(id, box) {
+  const removed = deleteOneStmt.run(id, box).changes;
+  if (removed > 0) pruneEmptyBoxes();
+  return removed > 0;
+}
+
+/** Remove every message in a mailbox, which also removes the address. */
+export function deleteMailsInBox(box) {
+  const removed = deleteBoxMailsStmt.run(box).changes;
+  if (removed > 0) pruneEmptyBoxes();
+  return removed;
 }
 
 /** Delete everything older than the current retention window. */
