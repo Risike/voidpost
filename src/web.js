@@ -19,6 +19,7 @@ import { normalizeMailbox } from "./smtp.js";
 
 const appCss = readFileSync(new URL("../public/app.css", import.meta.url), "utf8");
 const appJs = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
+const faviconSvg = readFileSync(new URL("../public/favicon.svg", import.meta.url), "utf8");
 
 const PAGE_HEADERS = {
   "Content-Type": "text/html; charset=utf-8",
@@ -154,6 +155,12 @@ async function route(request) {
   if (pathname === "/app.js") {
     return new Response(appJs, {
       headers: { ...ASSET_HEADERS, "Content-Type": "text/javascript; charset=utf-8" },
+    });
+  }
+
+  if (pathname === "/favicon.svg") {
+    return new Response(faviconSvg, {
+      headers: { ...ASSET_HEADERS, "Content-Type": "image/svg+xml; charset=utf-8" },
     });
   }
 

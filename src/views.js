@@ -67,6 +67,7 @@ function layout({ title, body, signedIn = true, box = null, count = null }) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)} · Voidpost</title>
 <link rel="stylesheet" href="/app.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${box ? `<script src="/app.js" defer></script>` : ""}
 </head>
 <body${box ? ` data-box="${esc(box)}" data-count="${count ?? 0}"` : ""}>

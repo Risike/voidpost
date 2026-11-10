@@ -12,7 +12,6 @@
 services:
   voidpost:
     build: .
-    image: voidpost:latest
     container_name: voidpost
     restart: unless-stopped
 
