@@ -119,7 +119,6 @@ export function homePage({ boxes, error = null }) {
     body: `
 <section class="hero">
   <div>
-    <div class="eyebrow">Catch-all reader</div>
     <h1>Open a mailbox</h1>
     <p class="muted">Every address at <strong>@${esc(config.domain)}</strong> is live. The first message delivered to a name creates that mailbox; it disappears again once its last message expires.</p>
     ${error ? `<p class="error">${esc(error)}</p>` : ""}
